@@ -11,7 +11,7 @@
     }
     body {
       font-family: 'Inter', sans-serif;
-      background-color: #f7f9fc;
+      background-color: grey;
       color: #2e2e2e;
       margin: 0;
       padding: 0;
@@ -20,7 +20,7 @@
       max-width: 800px;
       margin: 60px auto;
       padding: 2rem;
-      background: #ffffff;
+      background: lightgray;
       border-radius: 12px;
       box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
     }
@@ -35,7 +35,8 @@
       height: 180px;
       padding: 1rem;
       font-size: 1rem;
-      border: 1px solid #ccc;
+      background-color: lightgray;
+      border: 1px solid black;
       border-radius: 8px;
       resize: vertical;
     }
@@ -47,14 +48,14 @@
       font-size: 1rem;
       font-weight: 600;
       color: #fff;
-      background-color: #007bff;
+      background-color: gray;
       border: none;
       border-radius: 8px;
       cursor: pointer;
       transition: background-color 0.3s ease;
     }
     button:hover {
-      background-color: #0056b3;
+      background-color: black;
     }
 
     .result-section {
@@ -95,7 +96,7 @@
 <body>
 
   <div class="container">
-    <h1>📩 SMS Spam Classifier</h1>
+    <h1>MailSift</h1>
 
     <textarea id="inputText" placeholder="Paste or type your messages here... (one per line)"></textarea>
     <button onclick="classifyEmails()">Classify Messages</button>

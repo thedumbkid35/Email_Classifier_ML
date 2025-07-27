@@ -14,10 +14,10 @@ const PORT = process.env.PORT || 3000;
 app.use(cors());
 app.use(express.json());
 
-// Serve static files like bot2.html
+
 app.use(express.static(path.join(__dirname, 'public')));
 
-// POST /classify endpoint
+
 app.post('/classify', (req, res) => {
     const emails = req.body.emails || [];
 
@@ -49,7 +49,7 @@ app.post('/classify', (req, res) => {
     python.stdin.end();
 });
 
-// Optional: Redirect root URL to bot2.html
+
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'bot2.html'));
 });

@@ -4,7 +4,7 @@ import random
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.naive_bayes import MultinomialNB
 
-# === Step 1: Generate spam/ham ===
+
 def generate_spam_ham_data(num_samples=200):
     spam_templates = [
         "Congratulations! You've won a ${amount} gift card. Click {link} to claim your prize.",
@@ -40,7 +40,8 @@ def generate_spam_ham_data(num_samples=200):
         "Hi {name}, looking forward to discussing project updates during our next meeting.",
         "Dear {name}, please share your thoughts on the attached proposal.",
         "Hi {name}, here's the update regarding the {topic} you requested.",
-        "Congratulations baby! You're a dad now!"
+        "Congratulations baby! You're a dad now!",
+        "Congratulations! You are pregnant!"
     ]
 
     ham_chill = [
@@ -81,14 +82,14 @@ def generate_spam_ham_data(num_samples=200):
 
     return texts, labels
 
-# === Step 2: Train full classifier ===
+
 X_train, y_train = generate_spam_ham_data(300)
 vectorizer = TfidfVectorizer()
 X_train_vec = vectorizer.fit_transform(X_train)
 model = MultinomialNB()
 model.fit(X_train_vec, y_train)
 
-# === Step 3: Read input emails from stdin ===
+
 input_data = sys.stdin.read()
 try:
     input_json = json.loads(input_data)
@@ -97,11 +98,11 @@ except json.JSONDecodeError:
     print(json.dumps({"error": "Invalid JSON input"}))
     sys.exit(1)
 
-# === Step 4: Classify ===
+
 X_test_vec = vectorizer.transform(emails)
 predictions = model.predict(X_test_vec)
 
-# === Step 5: Organize by class ===
+
 output = {
     "ham_serious": [email for email, label in zip(emails, predictions) if label == 'ham_serious'],
     "ham_chill": [email for email, label in zip(emails, predictions) if label == 'ham_chill'],
