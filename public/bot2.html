@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>SMS Spam Classifier</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #f7f9fc;
+      color: #2e2e2e;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      max-width: 800px;
+      margin: 60px auto;
+      padding: 2rem;
+      background: #ffffff;
+      border-radius: 12px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+    }
+    h1 {
+      font-size: 2rem;
+      text-align: center;
+      margin-bottom: 1.5rem;
+      color: #1a1a1a;
+    }
+    textarea {
+      width: 100%;
+      height: 180px;
+      padding: 1rem;
+      font-size: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      resize: vertical;
+    }
+    button {
+      display: block;
+      width: 100%;
+      margin-top: 1rem;
+      padding: 0.75rem;
+      font-size: 1rem;
+      font-weight: 600;
+      color: #fff;
+      background-color: #007bff;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    .result-section {
+      margin-top: 2rem;
+    }
+
+    .result-list {
+      margin-top: 1rem;
+    }
+
+    .result-list h4 {
+      margin-bottom: 0.5rem;
+      font-size: 1.1rem;
+      color: #555;
+    }
+
+    ul {
+      list-style-type: disc;
+      padding-left: 20px;
+    }
+
+    .ham li {
+      color: #28a745;
+    }
+
+    .spam li {
+      color: #dc3545;
+    }
+
+    @media screen and (max-width: 600px) {
+      .container {
+        margin: 20px;
+        padding: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h1>📩 SMS Spam Classifier</h1>
+
+    <textarea id="inputText" placeholder="Paste or type your messages here... (one per line)"></textarea>
+    <button onclick="classifyEmails()">Classify Messages</button>
+
+    <div class="result-section" id="outputSection" style="display: none;">
+      <div id="seriousHamEmails" class="result-list"></div>
+      <div id="chillHamEmails" class="result-list"></div>
+      <div id="spamEmails" class="result-list"></div>
+    </div>
+  </div>
+
+  <script>
+    function classifyEmails() {
+      const inputText = document.getElementById("inputText").value.trim();
+      const outputSection = document.getElementById("outputSection");
+      const seriousHamEmails = document.getElementById("seriousHamEmails");
+      const chillHamEmails = document.getElementById("chillHamEmails");
+      const spamEmails = document.getElementById("spamEmails");
+
+      if (!inputText) {
+        alert("Please enter email messages to classify.");
+        return;
+      }
+
+      const emails = inputText.split("\n").map(email => email.trim()).filter(Boolean);
+
+      fetch('/classify', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ emails })
+      })
+      .then(response => response.json())
+      .then(data => {
+        seriousHamEmails.innerHTML = "";
+        chillHamEmails.innerHTML = "";
+        spamEmails.innerHTML = "";
+
+        if (data.ham_serious?.length) {
+          seriousHamEmails.innerHTML = "<h4> Important Messages:</h4><ul class='ham'></ul>";
+          const ul = seriousHamEmails.querySelector("ul");
+          data.ham_serious.forEach(msg => {
+            const li = document.createElement("li");
+            li.textContent = msg;
+            ul.appendChild(li);
+          });
+        }
+
+        if (data.ham_chill?.length) {
+          chillHamEmails.innerHTML = "<h4> Chill Messages:</h4><ul class='ham'></ul>";
+          const ul = chillHamEmails.querySelector("ul");
+          data.ham_chill.forEach(msg => {
+            const li = document.createElement("li");
+            li.textContent = msg;
+            ul.appendChild(li);
+          });
+        }
+
+        if (data.spam?.length) {
+          spamEmails.innerHTML = "<h4> Spam Messages:</h4><ul class='spam'></ul>";
+          const ul = spamEmails.querySelector("ul");
+          data.spam.forEach(msg => {
+            const li = document.createElement("li");
+            li.textContent = msg;
+            ul.appendChild(li);
+          });
+        }
+
+        outputSection.style.display = "block";
+      })
+      .catch(error => {
+        console.error("Error:", error);
+        alert("Something went wrong while classifying messages.");
+      });
+    }
+  </script>
+
+</body>
+</html>
