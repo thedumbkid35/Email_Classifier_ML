@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: sms-classifier
+    env: node
+    buildCommand: |
+      npm install
+      pip install -r requirements.txt
+    startCommand: node server.js
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.9
