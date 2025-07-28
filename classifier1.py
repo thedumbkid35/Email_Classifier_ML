@@ -18,7 +18,10 @@ def generate_spam_ham_data(num_samples=200):
         "New message from {sender}. Open it immediately at {link}.",
         "Act quickly! Your chance to win {item} ends soon.",
         "Work from home and earn ${amount} quickly! Details at {link}.",
-        "Airtel has launched its new premium offer!"
+        "Airtel has launched its new premium offer!",
+        "URGENT: Your account has been suspended. Click here immediately to restore access.",
+        "You won’t believe this—$10,000 deposited straight to my account with no work!",
+        "Your antivirus has expired. Renew now to protect your computer!"
     ]
 
     ham_serious = [
@@ -41,7 +44,9 @@ def generate_spam_ham_data(num_samples=200):
         "Dear {name}, please share your thoughts on the attached proposal.",
         "Hi {name}, here's the update regarding the {topic} you requested.",
         "Congratulations baby! You're a dad now!",
-        "Congratulations! You are pregnant!"
+        "Congratulations! You are pregnant!",
+        "Don’t forget to submit your timesheet before 6 PM today.",
+        
     ]
 
     ham_chill = [
@@ -58,7 +63,9 @@ def generate_spam_ham_data(num_samples=200):
         "Good morning {name}, hope you are having a productive day.",
         "Hello {name}, can you let me know your availability for a quick chat?",
         "Hey Bro, Up for a drink?",
-        "Hi baby! Can we go have a drink?"
+        "Hi baby! Can we go have a drink?",
+        "Hey, just checking in—did you get a chance to look at that job post I sent?",
+        "Haha I just walked into the wrong conference room and sat for 10 mins before realizing 😅"
     ]
 
     def fill_template(template):
@@ -83,7 +90,7 @@ def generate_spam_ham_data(num_samples=200):
     return texts, labels
 
 
-X_train, y_train = generate_spam_ham_data(300)
+X_train, y_train = generate_spam_ham_data(600)
 vectorizer = TfidfVectorizer()
 X_train_vec = vectorizer.fit_transform(X_train)
 model = MultinomialNB()
